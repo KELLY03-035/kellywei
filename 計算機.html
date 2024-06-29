@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>計算機</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    margin: 20px;
+    background-color: #f0f0f0;
+  }
+  .container {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  h2 {
+    color: #333;
+  }
+  .input-container {
+    margin-bottom: 20px;
+  }
+  textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+  }
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+  }
+  select {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  .result-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .column {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    width: 30%;
+    min-height: 150px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    overflow-y: auto;
+  }
+  .column-label {
+    text-align: center;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>計算機</h2>
+    <div class="input-container">
+      <label for="numbers">功率輸入：</label><br>
+      <textarea id="numbers" rows="5" placeholder="請在這裡輸入數字，每行一個"></textarea><br>
+      <label for="columns">選擇項數：</label>
+      <select id="columns">
+        <option value="2">單 項</option>
+        <option value="3">三 項</option>
+      </select><br>
+      <button onclick="arrangeNumbers()">計算</button>
+    </div>
+    <div class="result-container">
+      <div class="column">
+        <div class="column-label">A</div>
+        <div id="columnA"></div>
+      </div>
+      <div class="column">
+        <div class="column-label">B</div>
+        <div id="columnB"></div>
+      </div>
+      <div class="column">
+        <div class="column-label">C</div>
+        <div id="columnC"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function arrangeNumbers() {
+      let inputNumbers = document.getElementById('numbers').value.trim();
+      let columnCount = parseInt(document.getElementById('columns').value);
+
+      if (!inputNumbers || isNaN(columnCount)) {
+        alert('請輸入數字並選擇列數。');
+        return;
+      }
+
+      let numbers = inputNumbers.split('\n').map(num => parseInt(num.trim())).filter(num => !isNaN(num));
+
+      if (numbers.length === 0) {
+        alert('請輸入有效的數字。');
+        return;
+      }
+
+      numbers.sort((a, b) => b - a); // Sort numbers in descending order
+
+      let columnA = [], columnB = [], columnC = [];
+
+      // Distribute numbers evenly among columns
+      for (let i = 0; i < numbers.length; i++) {
+        if (columnCount === 2) {
+          if (i % 2 === 0) {
+            columnA.push(numbers[i]);
+          } else {
+            columnB.push(numbers[i]);
+          }
+        } else if (columnCount === 3) {
+          if (i % 3 === 0) {
+            columnA.push(numbers[i]);
+          } else if (i % 3 === 1) {
+            columnB.push(numbers[i]);
+          } else {
+            columnC.push(numbers[i]);
+          }
+        }
+      }
+
+      // Display results in columns
+      document.getElementById('columnA').innerHTML = columnA.join('<br>');
+      document.getElementById('columnB').innerHTML = columnB.join('<br>');
+      document.getElementById('columnC').innerHTML = columnC.join('<br>');
+    }
+  </script>
+</body>
+</html>
